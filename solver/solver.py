@@ -25,22 +25,11 @@ class SolverInfeasibleError(Exception):
     pass
 
 
-# Each variant penalises dropping optional activities differently,
-# producing meaningfully different route characters.
+# Only return the best route (shortest time)
 VARIANT_CONFIGS: list[dict] = [
     {
-        "name": "shortest_time",
-        "drop_penalty": 500_000,   # drops optionals if travel cost is high
-        "time_limit_s": 5,
-    },
-    {
-        "name": "most_activities",
-        "drop_penalty": 100_000_000,  # almost never drops optionals
-        "time_limit_s": 5,
-    },
-    {
-        "name": "balanced",
-        "drop_penalty": 2_000_000,
+        "name": "optimal",
+        "drop_penalty": 500_000,
         "time_limit_s": 5,
     },
 ]

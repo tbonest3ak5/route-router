@@ -151,10 +151,9 @@ export function TripMap({
       bounds.extend(latlng);
     };
 
-    // Only show depot markers if we have a selected route (user solved)
-    if (selectedRoute && startLatLng) addDepotMarker(startLatLng, "S", "Start");
+    // Show depot markers whenever user has entered start/end locations (not just when route selected)
+    if (startLatLng) addDepotMarker(startLatLng, "S", "Start");
     if (
-      selectedRoute &&
       endLatLng &&
       (endLatLng.lat !== startLatLng?.lat || endLatLng.lng !== startLatLng?.lng)
     ) {

@@ -11,6 +11,15 @@ export function minutesToTime(minutes: number): string {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
+/** Convert minutes since midnight to "h:MM AM/PM" */
+export function minutesToTimeAMPM(minutes: number): string {
+  const h = Math.floor(minutes / 60) % 24;
+  const m = minutes % 60;
+  const period = h >= 12 ? "PM" : "AM";
+  const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return `${displayHour}:${String(m).padStart(2, "0")} ${period}`;
+}
+
 /** Format a duration in minutes to a readable string like "1h 30m" */
 export function formatDuration(minutes: number): string {
   if (minutes < 60) return `${minutes}m`;

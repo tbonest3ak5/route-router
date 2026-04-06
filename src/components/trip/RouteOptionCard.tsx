@@ -3,7 +3,7 @@
 import { Bus, Footprints, Train } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { formatDuration, formatTravelTime, minutesToTime } from "@/lib/time-utils";
+import { formatDuration, formatTravelTime, minutesToTime, minutesToTimeAMPM } from "@/lib/time-utils";
 import { timeToMinutes } from "@/lib/time-utils";
 import {
   Activity,
@@ -14,23 +14,10 @@ import {
   TripConfig,
 } from "@/types";
 
-const VARIANT_META: Record<
-  SolverRoute["variant"],
-  { label: string; className: string }
-> = {
-  shortest_time: {
-    label: "Fastest",
-    className: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300",
-  },
-  most_activities: {
-    label: "Most Stops",
-    className: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300",
-  },
-  balanced: {
-    label: "Balanced",
-    className: "bg-violet-50 text-violet-700 border-violet-200 dark:bg-violet-950 dark:text-violet-300",
-  },
-};
+/** Extract just the location name (first part before comma) */
+function getLocationName(address: string): string {
+  return address.split(",")[0].trim();
+}
 
 function vehicleIcon(vehicleType?: string) {
   const t = vehicleType?.toUpperCase() ?? "";
@@ -151,40 +138,25 @@ export function RouteOptionCard({
     0
   );
 
-  const meta = VARIANT_META[route.variant];
-
-  // Leg index: leg[0] = start→stop[0], leg[i] = stop[i-1]→stop[i], leg[N] = stop[N-1]→end
-  // We show the legs BEFORE each stop (leg[i] = before stop[i])
-  const getLegBeforeStop = (stopIndex: number) =>
-    legDetails?.[stopIndex] ?? null;
+  const startTimeName = tripConfig ? getLocationName(tripConfig.startAddress) : "Start";
+  const endTimeName = tripConfig ? getLocationName(tripConfig.endAddress) : "End";
 
   return (
     <div
       onClick={onSelect}
       className={cn(
-        "rounded-xl border bg-card cursor-pointer transition-all duration-150",
-        "hover:shadow-md hover:border-primary/30",
-        isSelected
-          ? "border-primary shadow-md ring-1 ring-primary/20"
-          : "border-border"
+        "rounded-xl border bg-card transition-all duration-150",
+        "border-primary shadow-md"
       )}
     >
       {/* Card header */}
       <div className="px-4 pt-3 pb-2">
         <div className="flex items-center gap-2 mb-2">
           <span
-            className={cn(
-              "text-xs font-semibold px-2 py-0.5 rounded-full border",
-              meta.className
-            )}
+            className="text-xs font-semibold px-2 py-0.5 rounded-full border bg-primary text-primary-foreground"
           >
-            {meta.label}
+            Optimal Route
           </span>
-          {isSelected && (
-            <span className="text-xs bg-primary text-primary-foreground px-2 py-0.5 rounded-full font-medium">
-              Selected
-            </span>
-          )}
         </div>
         <div className="flex gap-3 text-xs text-muted-foreground">
           <span>{route.stops.length} {route.stops.length === 1 ? "stop" : "stops"}</span>
@@ -205,10 +177,10 @@ export function RouteOptionCard({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-semibold text-green-600 dark:text-green-400">Depart Start</span>
+              <span className="text-sm font-semibold text-green-600 dark:text-green-400">Depart {startTimeName}</span>
             </div>
             <div className="text-xs text-muted-foreground">
-              <span className="font-medium text-foreground/80">{minutesToTime(startMinutes)}</span>
+              <span className="font-medium text-foreground/80">{minutesToTimeAMPM(startMinutes)}</span>
             </div>
           </div>
         </div>
@@ -264,9 +236,9 @@ export function RouteOptionCard({
                     )}
                   </div>
                   <div className="text-xs text-muted-foreground flex items-center gap-1.5">
-                    <span className="font-medium text-foreground/80">{minutesToTime(stop.arrivalMinutes)}</span>
+                    <span className="font-medium text-foreground/80">{minutesToTimeAMPM(stop.arrivalMinutes)}</span>
                     <span>→</span>
-                    <span className="font-medium text-foreground/80">{minutesToTime(stop.departureMinutes)}</span>
+                    <span className="font-medium text-foreground/80">{minutesToTimeAMPM(stop.departureMinutes)}</span>
                     <span className="px-1.5 py-0.5 bg-muted rounded text-muted-foreground/70">
                       {formatDuration(stop.departureMinutes - stop.arrivalMinutes)} here
                     </span>
@@ -294,10 +266,10 @@ export function RouteOptionCard({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="text-sm font-semibold text-red-600 dark:text-red-400">Arrive End</span>
+              <span className="text-sm font-semibold text-red-600 dark:text-red-400">Arrive {endTimeName}</span>
             </div>
             <div className="text-xs text-muted-foreground">
-              <span className="font-medium text-foreground/80">{minutesToTime(endMinutes)}</span>
+              <span className="font-medium text-foreground/80">{minutesToTimeAMPM(endMinutes)}</span>
             </div>
           </div>
         </div>
