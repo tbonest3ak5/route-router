@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pip show ortools)",
+      "Bash(pip show:*)",
+      "Bash(python -c \"import ortools; print\\(ortools.__version__\\)\")",
+      "Bash(pip index:*)",
+      "Bash(python -c \"import sys; print\\(sys.version_info\\)\")",
+      "Bash(npm list:*)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --yes)"
+    ]
+  }
+}
