@@ -80,30 +80,74 @@ export default function Home() {
         )}
       </header>
 
-      {/* Body - Three columns */}
+      {/* Body - Two columns: Left panels + Map */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* Left panel - Friends */}
-        <aside className="w-80 shrink-0 border-r border-border/60 flex flex-col overflow-hidden bg-card/30">
-          <div className="px-5 py-4 border-b border-border/40">
-            <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-              Friends & Activities
-            </h2>
+        {/* Left side - Friends + Trip Config side by side */}
+        <aside className="w-[640px] shrink-0 border-r border-border/60 flex overflow-hidden bg-card/30">
+          
+          {/* Friends panel */}
+          <div className="w-1/2 flex flex-col border-r border-border/40">
+            <div className="px-4 py-3 border-b border-border/40">
+              <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                Friends & Activities
+              </h2>
+            </div>
+            <ScrollArea className="flex-1">
+              <FriendList
+                friends={friends}
+                activities={activities}
+                onAddFriend={addFriend}
+                onRemoveFriend={removeFriend}
+                onAddActivity={addActivity}
+                onRemoveActivity={removeActivity}
+              />
+            </ScrollArea>
           </div>
-          <ScrollArea className="flex-1">
-            <FriendList
-              friends={friends}
-              activities={activities}
-              onAddFriend={addFriend}
-              onRemoveFriend={removeFriend}
-              onAddActivity={addActivity}
-              onRemoveActivity={removeActivity}
-            />
-          </ScrollArea>
+
+          {/* Trip Config + Results panel */}
+          <div className="w-1/2 flex flex-col">
+            <div className="px-4 py-3 border-b border-border/40">
+              <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                Trip Planning
+              </h2>
+            </div>
+            <ScrollArea className="flex-1">
+              <TripConfigPanel
+                tripConfig={tripConfig}
+                onConfigChange={updateTripConfig}
+                onSolve={handleSolve}
+                isSolving={isLoading}
+                canSolve={activities.length > 0}
+              />
+
+              {error && (
+                <div className="mx-4 mb-4 px-3 py-2.5 bg-destructive/10 border border-destructive/20 rounded-xl">
+                  <p className="text-sm text-destructive">{error}</p>
+                </div>
+              )}
+
+              {response && (
+                <>
+                  <Separator className="mx-4" />
+                  <RouteResultsPanel
+                    response={response}
+                    activities={activities}
+                    friends={friends}
+                    selectedRouteIndex={selectedRouteIndex}
+                    onSelectRoute={handleRouteSelect}
+                    directionsLegs={directionsLegs}
+                  />
+                </>
+              )}
+            </ScrollArea>
+          </div>
+
         </aside>
 
-        {/* Center - Map */}
+        {/* Right side - Map takes remaining space */}
         <main className="flex-1 relative overflow-hidden bg-muted/30">
           <TripMap
             activities={activities}
@@ -116,45 +160,6 @@ export default function Home() {
             onDirectionsLegs={setDirectionsLegs}
           />
         </main>
-
-        {/* Right panel - Trip Config & Results */}
-        <aside className="w-80 shrink-0 border-l border-border/60 flex flex-col overflow-hidden bg-card/30">
-          <div className="px-5 py-4 border-b border-border/40">
-            <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-              Trip Planning
-            </h2>
-          </div>
-          <ScrollArea className="flex-1">
-            <TripConfigPanel
-              tripConfig={tripConfig}
-              onConfigChange={updateTripConfig}
-              onSolve={handleSolve}
-              isSolving={isLoading}
-              canSolve={activities.length > 0}
-            />
-
-            {error && (
-              <div className="mx-5 mb-4 px-4 py-3 bg-destructive/10 border border-destructive/20 rounded-xl">
-                <p className="text-sm text-destructive">{error}</p>
-              </div>
-            )}
-
-            {response && (
-              <>
-                <Separator className="mx-5" />
-                <RouteResultsPanel
-                  response={response}
-                  activities={activities}
-                  friends={friends}
-                  selectedRouteIndex={selectedRouteIndex}
-                  onSelectRoute={handleRouteSelect}
-                  directionsLegs={directionsLegs}
-                />
-              </>
-            )}
-          </ScrollArea>
-        </aside>
 
       </div>
     </div>

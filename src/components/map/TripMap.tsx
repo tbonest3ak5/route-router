@@ -109,6 +109,7 @@ export function TripMap({
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: true,
+      gestureHandling: "greedy",
     });
 
     directionsRendererRef.current = new google.maps.DirectionsRenderer({
