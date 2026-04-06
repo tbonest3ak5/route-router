@@ -47,18 +47,19 @@ export function PlacesCombobox({ value, onSelect, placeholder }: Props) {
   };
 
   return (
-    <Command className="border rounded-md" shouldFilter={false}>
+    <Command className="border border-input rounded-xl shadow-sm overflow-hidden bg-background" shouldFilter={false}>
       <CommandInput
         value={query}
         onValueChange={handleInput}
         placeholder={placeholder ?? "Search for a place..."}
         onFocus={() => predictions.length > 0 && setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
+        className="h-10"
       />
       {open && (
-        <CommandList>
+        <CommandList className="border-t border-border/40">
           {predictions.length === 0 ? (
-            <CommandEmpty>No results</CommandEmpty>
+            <CommandEmpty className="py-4 text-sm text-muted-foreground">No results found</CommandEmpty>
           ) : (
             <CommandGroup>
               {predictions.map((p) => (
@@ -66,8 +67,9 @@ export function PlacesCombobox({ value, onSelect, placeholder }: Props) {
                   key={p.placeId}
                   value={p.description}
                   onSelect={() => handleSelect(p)}
+                  className="cursor-pointer"
                 >
-                  {p.description}
+                  <span className="truncate">{p.description}</span>
                 </CommandItem>
               ))}
             </CommandGroup>

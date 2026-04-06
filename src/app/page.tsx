@@ -6,13 +6,13 @@ import { FriendList } from "@/components/friends/FriendList";
 import { TripMap } from "@/components/map/TripMap";
 import { RouteResultsPanel } from "@/components/trip/RouteResultsPanel";
 import { TripConfigPanel } from "@/components/trip/TripConfigPanel";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useFriends } from "@/hooks/useFriends";
 import { useSolver } from "@/hooks/useSolver";
 import { useTripConfig } from "@/hooks/useTripConfig";
 import { DirectionsLegDetails } from "@/types";
-import { MapPin, Route, Users } from "lucide-react";
+import { Compass } from "lucide-react";
 
 export default function Home() {
   const { friends, activities, addFriend, removeFriend, addActivity, removeActivity } =
@@ -49,110 +49,62 @@ export default function Home() {
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">
       {/* Header */}
-      <header className="border-b bg-background px-5 py-2.5 flex items-center gap-3 shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary rounded-lg p-1.5">
-            <MapPin className="h-3.5 w-3.5 text-primary-foreground" />
+      <header className="border-b border-border/60 bg-card/80 backdrop-blur-sm px-6 py-3 flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="bg-primary rounded-xl p-2 shadow-sm">
+            <Compass className="h-5 w-5 text-primary-foreground" />
           </div>
-          <h1 className="font-bold text-sm tracking-tight">Day Trip Planner</h1>
+          <div>
+            <h1 className="font-semibold text-base tracking-tight text-foreground">Route Router</h1>
+            <p className="text-xs text-muted-foreground">Plan your perfect day trip</p>
+          </div>
         </div>
         {activities.length > 0 && (
-          <div className="ml-auto flex items-center gap-3 text-xs text-muted-foreground">
-            <span>{friends.length} {friends.length === 1 ? "friend" : "friends"}</span>
-            <Separator orientation="vertical" className="h-3" />
-            <span>{activities.length} {activities.length === 1 ? "activity" : "activities"}</span>
+          <div className="ml-auto flex items-center gap-4 text-sm">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/50">
+              <span className="text-muted-foreground">{friends.length}</span>
+              <span className="text-foreground font-medium">{friends.length === 1 ? "friend" : "friends"}</span>
+            </div>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/50">
+              <span className="text-muted-foreground">{activities.length}</span>
+              <span className="text-foreground font-medium">{activities.length === 1 ? "activity" : "activities"}</span>
+            </div>
             {activities.filter((a) => a.required).length > 0 && (
-              <>
-                <Separator orientation="vertical" className="h-3" />
-                <span className="text-amber-600 font-medium">
-                  {activities.filter((a) => a.required).length} non-negotiable
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-100/50 border border-amber-200/50">
+                <span className="text-amber-700 font-medium">
+                  {activities.filter((a) => a.required).length} must-do
                 </span>
-              </>
+              </div>
             )}
           </div>
         )}
       </header>
 
-      {/* Body */}
+      {/* Body - Three columns */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* ── Left panel with tabs ── */}
-        <aside className="w-[380px] shrink-0 border-r flex flex-col overflow-hidden bg-background">
-          <Tabs defaultValue="friends" className="flex flex-col h-full">
-            <TabsList className="w-full rounded-none border-b shrink-0 h-10 bg-muted/40 justify-start px-3 gap-1">
-              <TabsTrigger
-                value="friends"
-                className="flex items-center gap-1.5 text-xs h-7 px-3"
-              >
-                <Users className="h-3 w-3" />
-                Friends
-                {activities.length > 0 && (
-                  <span className="bg-primary/15 text-primary rounded-full px-1.5 py-0 text-[10px] font-semibold ml-0.5">
-                    {activities.length}
-                  </span>
-                )}
-              </TabsTrigger>
-              <TabsTrigger
-                value="plan"
-                className="flex items-center gap-1.5 text-xs h-7 px-3"
-              >
-                <Route className="h-3 w-3" />
-                Plan
-                {response && (
-                  <span className="bg-emerald-100 text-emerald-700 rounded-full px-1.5 py-0 text-[10px] font-semibold ml-0.5">
-                    {response.routes.length}
-                  </span>
-                )}
-              </TabsTrigger>
-            </TabsList>
-
-            {/* Friends tab */}
-            <TabsContent value="friends" className="flex-1 overflow-y-auto mt-0 border-0 p-0">
-              <FriendList
-                friends={friends}
-                activities={activities}
-                onAddFriend={addFriend}
-                onRemoveFriend={removeFriend}
-                onAddActivity={addActivity}
-                onRemoveActivity={removeActivity}
-              />
-            </TabsContent>
-
-            {/* Plan tab */}
-            <TabsContent value="plan" className="flex-1 overflow-y-auto mt-0 border-0 p-0">
-              <TripConfigPanel
-                tripConfig={tripConfig}
-                onConfigChange={updateTripConfig}
-                onSolve={handleSolve}
-                isSolving={isLoading}
-                canSolve={activities.length > 0}
-              />
-
-              {error && (
-                <div className="mx-4 mb-3 px-3 py-2 bg-destructive/10 border border-destructive/20 rounded-lg">
-                  <p className="text-sm text-destructive">{error}</p>
-                </div>
-              )}
-
-              {response && (
-                <>
-                  <Separator />
-                  <RouteResultsPanel
-                    response={response}
-                    activities={activities}
-                    friends={friends}
-                    selectedRouteIndex={selectedRouteIndex}
-                    onSelectRoute={handleRouteSelect}
-                    directionsLegs={directionsLegs}
-                  />
-                </>
-              )}
-            </TabsContent>
-          </Tabs>
+        {/* Left panel - Friends */}
+        <aside className="w-80 shrink-0 border-r border-border/60 flex flex-col overflow-hidden bg-card/30">
+          <div className="px-5 py-4 border-b border-border/40">
+            <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Friends & Activities
+            </h2>
+          </div>
+          <ScrollArea className="flex-1">
+            <FriendList
+              friends={friends}
+              activities={activities}
+              onAddFriend={addFriend}
+              onRemoveFriend={removeFriend}
+              onAddActivity={addActivity}
+              onRemoveActivity={removeActivity}
+            />
+          </ScrollArea>
         </aside>
 
-        {/* ── Map (full height) ── */}
-        <main className="flex-1 relative overflow-hidden">
+        {/* Center - Map */}
+        <main className="flex-1 relative overflow-hidden bg-muted/30">
           <TripMap
             activities={activities}
             friends={friends}
@@ -164,6 +116,45 @@ export default function Home() {
             onDirectionsLegs={setDirectionsLegs}
           />
         </main>
+
+        {/* Right panel - Trip Config & Results */}
+        <aside className="w-80 shrink-0 border-l border-border/60 flex flex-col overflow-hidden bg-card/30">
+          <div className="px-5 py-4 border-b border-border/40">
+            <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Trip Planning
+            </h2>
+          </div>
+          <ScrollArea className="flex-1">
+            <TripConfigPanel
+              tripConfig={tripConfig}
+              onConfigChange={updateTripConfig}
+              onSolve={handleSolve}
+              isSolving={isLoading}
+              canSolve={activities.length > 0}
+            />
+
+            {error && (
+              <div className="mx-5 mb-4 px-4 py-3 bg-destructive/10 border border-destructive/20 rounded-xl">
+                <p className="text-sm text-destructive">{error}</p>
+              </div>
+            )}
+
+            {response && (
+              <>
+                <Separator className="mx-5" />
+                <RouteResultsPanel
+                  response={response}
+                  activities={activities}
+                  friends={friends}
+                  selectedRouteIndex={selectedRouteIndex}
+                  onSelectRoute={handleRouteSelect}
+                  directionsLegs={directionsLegs}
+                />
+              </>
+            )}
+          </ScrollArea>
+        </aside>
 
       </div>
     </div>
