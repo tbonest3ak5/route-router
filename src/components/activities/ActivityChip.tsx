@@ -128,3 +128,4 @@ export function ActivityChip({ activity, onRemove, onUpdate }: Props) {
       </button>
     </div>
   );
+}

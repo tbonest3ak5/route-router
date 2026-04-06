@@ -1,7 +1,12 @@
 ## Route Router
+You and your friends want to visit locations in a city 
 
-
-
+Tech stack:
+- Claude Code, Vercel V0, and Github Copilot for vibe coding
+- Google OR-Tools Vehicle Routing Problem solver for route planning
+- Google Maps Distance Matrix API for computing travel paths and distances
+- FastAPI backend
+- Next.js frontend
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
