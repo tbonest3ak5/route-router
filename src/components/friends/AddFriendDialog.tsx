@@ -32,7 +32,7 @@ export function AddFriendDialog({ onAdd }: Props) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <>
       <Button
         variant="outline"
         className="w-full mt-3 h-10 border-dashed border-border/60 hover:border-primary/40 hover:bg-accent/50"
@@ -41,7 +41,8 @@ export function AddFriendDialog({ onAdd }: Props) {
         <UserPlus className="h-4 w-4 mr-2" />
         Add Friend
       </Button>
-      <DialogContent className="sm:max-w-sm">
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-lg">Add a Friend</DialogTitle>
         </DialogHeader>
@@ -73,6 +74,7 @@ export function AddFriendDialog({ onAdd }: Props) {
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>
+      </Dialog>
+    </>
   );
 }
