@@ -120,4 +120,6 @@ export interface TransitStepDetails {
 export interface DirectionsLegDetails {
   steps: TransitStepDetails[];
   durationText?: string;
+  durationSeconds?: number;
+  distanceText?: string;
 }

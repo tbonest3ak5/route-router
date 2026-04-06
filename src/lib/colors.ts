@@ -1,12 +1,12 @@
 const FRIEND_COLORS = [
-  "#2d6a5e", // teal (primary)
-  "#6b8e7a", // sage
-  "#c17f59", // terracotta
-  "#7c9eb2", // slate blue
-  "#a67c52", // warm brown
-  "#8b7355", // mocha
-  "#5c8a8a", // ocean
-  "#9b8b7a", // taupe
+  "#e05c4b", // red
+  "#f07c35", // orange
+  "#2d6a5e", // teal
+  "#7c5cbf", // purple
+  "#2980b9", // blue
+  "#27ae60", // green
+  "#e6a817", // amber
+  "#c2407a", // pink
 ];
 
 export function assignColor(index: number): string {

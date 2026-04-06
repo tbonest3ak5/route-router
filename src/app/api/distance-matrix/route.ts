@@ -9,6 +9,8 @@ interface RequestBody {
   origins: LatLng[];
   destinations: LatLng[];
   mode: "driving" | "transit";
+  /** Unix timestamp for transit departure scheduling */
+  departureTimestamp?: number;
 }
 
 export async function POST(req: NextRequest) {
@@ -35,6 +37,11 @@ export async function POST(req: NextRequest) {
   url.searchParams.set("origins", originsStr);
   url.searchParams.set("destinations", destsStr);
   url.searchParams.set("mode", body.mode);
+  // Transit requires departure_time for accurate durations; use provided timestamp or now
+  if (body.mode === "transit") {
+    const ts = body.departureTimestamp ?? Math.floor(Date.now() / 1000);
+    url.searchParams.set("departure_time", String(ts));
+  }
   url.searchParams.set("key", key);
 
   const res = await fetch(url.toString());

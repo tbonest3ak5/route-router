@@ -68,11 +68,20 @@ export function ActivityEditDialog({ open, activity, onSave, onCancel }: Props) 
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onCancel()}>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="sm:max-w-sm p-0 overflow-hidden">
+        {/* Map preview */}
+        <div className="w-full h-36 bg-muted overflow-hidden relative">
+          <img
+            src={`/api/place-photo?lat=${activity.latlng.lat}&lng=${activity.latlng.lng}&name=${encodeURIComponent(activity.name)}`}
+            alt={activity.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="p-6 pt-4">
         <DialogHeader>
-          <DialogTitle className="text-lg">Edit Activity</DialogTitle>
+          <DialogTitle className="text-lg">{activity.name || "Edit Activity"}</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 mt-3">
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">
               Activity name (optional)
@@ -153,6 +162,7 @@ export function ActivityEditDialog({ open, activity, onSave, onCancel }: Props) 
             </Button>
           </div>
         </form>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -29,8 +29,8 @@ class SolverInfeasibleError(Exception):
 VARIANT_CONFIGS: list[dict] = [
     {
         "name": "optimal",
-        "drop_penalty": 500_000,
-        "time_limit_s": 5,
+        "drop_penalty": 50_000_000,
+        "time_limit_s": 8,
     },
 ]
 
@@ -100,7 +100,7 @@ def _solve_variant(
     horizon = tc.endTimeMinutes * 60  # seconds from midnight (upper bound)
     routing.AddDimension(
         transit_cb_idx,
-        slack_max=0,
+        slack_max=3600,  # allow up to 1hr waiting at any stop
         capacity=horizon,
         fix_start_cumul_to_zero=False,
         name="Time",
@@ -163,7 +163,7 @@ def _extract_route(
     solution: pywrapcp.Assignment,
     activities: list[SolverActivity],
     start_time_minutes: int,
-    variant: Literal["shortest_time", "most_activities", "balanced"],
+    variant: Literal["optimal"],
 ) -> SolverRoute:
     time_dim = routing.GetDimensionOrDie("Time")
     stops: list[ScheduledStop] = []

@@ -56,7 +56,7 @@ export function PlacesCombobox({ value, onSelect, placeholder }: Props) {
         onBlur={() => setTimeout(() => setOpen(false), 150)}
       />
       {open && predictions.length > 0 && (
-        <CommandList className="border border-input rounded-xl mt-1 bg-popover shadow-lg">
+        <CommandList className="border border-input rounded-xl mt-1 bg-popover shadow-lg max-h-64 w-[420px]">
           <CommandGroup>
             {predictions.map((p) => (
               <CommandItem
@@ -64,7 +64,7 @@ export function PlacesCombobox({ value, onSelect, placeholder }: Props) {
                 value={p.description}
                 onSelect={() => handleSelect(p)}
               >
-                <span className="truncate">{p.description}</span>
+                <span className="whitespace-normal break-words">{p.description}</span>
               </CommandItem>
             ))}
           </CommandGroup>

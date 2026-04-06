@@ -11,7 +11,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Activity, Friend } from "@/types";
-import { ChevronDown, ChevronUp, Trash2, Plus } from "lucide-react";
+import { ChevronDown, ChevronUp, X, Plus } from "lucide-react";
 
 interface Props {
   friend: Friend;
@@ -62,7 +62,7 @@ export function FriendCard({
               className="text-muted-foreground hover:text-destructive transition-colors p-1 rounded-md hover:bg-destructive/10"
               aria-label={`Remove ${friend.name}`}
             >
-              <Trash2 className="h-4 w-4" />
+              <X className="h-4 w-4" />
             </button>
           </div>
         </div>

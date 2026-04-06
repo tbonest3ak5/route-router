@@ -14,12 +14,13 @@ import {
 
 async function fetchDistanceMatrix(
   nodes: LatLng[],
-  mode: "driving" | "transit"
+  mode: "driving" | "transit",
+  departureTimestamp?: number
 ): Promise<number[][]> {
   const res = await fetch("/api/distance-matrix", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ origins: nodes, destinations: nodes, mode }),
+    body: JSON.stringify({ origins: nodes, destinations: nodes, mode, departureTimestamp }),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({})) as { error?: string };
@@ -31,6 +32,7 @@ async function fetchDistanceMatrix(
 
 export function useSolver() {
   const [response, setResponse] = useState<SolverResponse | null>(null);
+  const [solvedMode, setSolvedMode] = useState<"driving" | "transit" | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState(0);
@@ -40,6 +42,7 @@ export function useSolver() {
       setIsLoading(true);
       setError(null);
       setResponse(null);
+      setSolvedMode(null);
       setSelectedRouteIndex(0);
 
       try {
@@ -55,9 +58,16 @@ export function useSolver() {
           ...activities.map((a) => a.latlng),
         ];
 
+        // Build departure timestamp from trip date + start time for accurate transit durations
+        const [h, m] = tripConfig.startTime.split(":").map(Number);
+        const depDate = new Date(tripConfig.date + "T00:00:00");
+        depDate.setHours(h, m, 0, 0);
+        const departureTimestamp = Math.floor(depDate.getTime() / 1000);
+
         const durationSeconds = await fetchDistanceMatrix(
           nodes,
-          tripConfig.travelMode
+          tripConfig.travelMode,
+          departureTimestamp
         );
 
         const request: SolverRequest = {
@@ -81,6 +91,7 @@ export function useSolver() {
 
         const result = await callSolver(request);
         setResponse(result);
+        setSolvedMode(tripConfig.travelMode);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Unknown error");
       } finally {
@@ -90,12 +101,21 @@ export function useSolver() {
     []
   );
 
+  const clearResponse = useCallback(() => {
+    setResponse(null);
+    setSolvedMode(null);
+    setError(null);
+    setSelectedRouteIndex(0);
+  }, []);
+
   return {
     solve,
     response,
+    solvedMode,
     isLoading,
     error,
     selectedRouteIndex,
     setSelectedRouteIndex,
+    clearResponse,
   };
 }

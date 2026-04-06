@@ -18,11 +18,14 @@ export default function Home() {
   const { friends, activities, addFriend, removeFriend, addActivity, removeActivity, updateActivity } =
     useFriends();
   const { tripConfig, updateTripConfig } = useTripConfig();
-  const { solve, response, isLoading, error, selectedRouteIndex, setSelectedRouteIndex } =
+  const { solve, response, solvedMode, isLoading, error, selectedRouteIndex, setSelectedRouteIndex, clearResponse } =
     useSolver();
   const [directionsLegs, setDirectionsLegs] = useState<DirectionsLegDetails[] | null>(null);
 
   const selectedRoute = response?.routes[selectedRouteIndex] ?? null;
+
+  // Hide results if the user has changed travel mode since the last solve
+  const resultsStale = response !== null && solvedMode !== null && tripConfig?.travelMode !== solvedMode;
 
   // Combine trip date + start time into a Date for transit scheduling
   const tripStartDate = useMemo(() => {
@@ -39,9 +42,19 @@ export default function Home() {
     solve(activities, tripConfig);
   };
 
+  const handleConfigChange = (config: import("@/types").TripConfig) => {
+    // If travel mode changed, discard stale results so the map clears too
+    if (config.travelMode !== tripConfig?.travelMode) {
+      clearResponse();
+      setDirectionsLegs(null);
+    }
+    updateTripConfig(config);
+  };
+
   const handleRouteSelect = (index: number) => {
-    setSelectedRouteIndex(index);
+    if (index === selectedRouteIndex) return; // already selected — don't clear legs
     setDirectionsLegs(null);
+    setSelectedRouteIndex(index);
   };
 
   return (
@@ -82,7 +95,7 @@ export default function Home() {
       <div className="flex flex-1 overflow-hidden">
 
         {/* Left side - Friends + Trip Config side by side */}
-        <aside className="w-[780px] shrink-0 border-r border-border/60 flex overflow-hidden bg-card/30">
+        <aside className="w-[920px] shrink-0 border-r border-border/60 flex overflow-hidden bg-card/30">
           
           {/* Friends panel */}
           <div className="w-[320px] shrink-0 flex flex-col border-r border-border/40 min-h-0">
@@ -116,7 +129,7 @@ export default function Home() {
             <ScrollArea className="flex-1 overflow-y-auto">
               <TripConfigPanel
                 tripConfig={tripConfig}
-                onConfigChange={updateTripConfig}
+                onConfigChange={handleConfigChange}
                 onSolve={handleSolve}
                 isSolving={isLoading}
                 canSolve={activities.length > 0}
@@ -128,7 +141,13 @@ export default function Home() {
                 </div>
               )}
 
-              {response && (
+              {resultsStale && (
+                <div className="mx-4 mb-4 px-3 py-2.5 bg-muted/60 border border-border/40 rounded-xl">
+                  <p className="text-xs text-muted-foreground">Travel mode changed — search again to get updated results.</p>
+                </div>
+              )}
+
+              {response && !resultsStale && (
                 <>
                   <Separator className="mx-4" />
                   <RouteResultsPanel

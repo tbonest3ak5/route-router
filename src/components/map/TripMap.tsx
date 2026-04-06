@@ -183,8 +183,10 @@ export function TripMap({
       const durStr =
         dur >= 60 ? `${Math.floor(dur / 60)}h${dur % 60 ? ` ${dur % 60}m` : ""}` : `${dur}m`;
 
+      const photoUrl = `/api/place-photo?lat=${act.latlng.lat}&lng=${act.latlng.lng}&name=${encodeURIComponent(act.name)}`;
       const infoWindow = new google.maps.InfoWindow({
-        content: `<div style="font-family:system-ui;font-size:13px;max-width:200px">
+        content: `<div style="font-family:system-ui;font-size:13px;max-width:220px">
+          <img src="${photoUrl}" alt="" style="width:100%;border-radius:6px;margin-bottom:6px;display:block" />
           <div style="font-weight:600;margin-bottom:2px">${act.name}</div>
           <div style="color:#6b7280">${durStr} minimum</div>
           <div style="color:#6b7280">${friend?.name ?? ""}</div>
@@ -201,7 +203,7 @@ export function TripMap({
 
     if (!bounds.isEmpty()) mapInstanceRef.current.fitBounds(bounds, 60);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapsLoaded, activities, friends, startLatLng, endLatLng]);
+  }, [mapsLoaded, activities, friends, selectedRoute, startLatLng, endLatLng]);
 
   // Draw route
   useEffect(() => {
@@ -259,6 +261,8 @@ export function TripMap({
           onDirectionsLegs(
             result.routes[0].legs.map((leg) => ({
               durationText: leg.duration?.text,
+              durationSeconds: leg.duration?.value,
+              distanceText: leg.distance?.text,
               steps: leg.steps.map(extractStepDetails),
             }))
           );
@@ -294,14 +298,17 @@ export function TripMap({
         });
         if (onDirectionsLegs) {
           onDirectionsLegs(
-            results.map((r) =>
-              r
+            results.map((r) => {
+              const leg = r?.routes[0]?.legs[0];
+              return leg
                 ? {
-                    durationText: r.routes[0]?.legs[0]?.duration?.text,
-                    steps: r.routes[0]?.legs[0]?.steps.map(extractStepDetails) ?? [],
+                    durationText: leg.duration?.text,
+                    durationSeconds: leg.duration?.value,
+                    distanceText: leg.distance?.text,
+                    steps: leg.steps.map(extractStepDetails),
                   }
-                : { steps: [] }
-            )
+                : { steps: [] };
+            })
           );
         }
       });

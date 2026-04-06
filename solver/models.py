@@ -43,7 +43,7 @@ class ScheduledStop(BaseModel):
 
 
 class SolverRoute(BaseModel):
-    variant: Literal["shortest_time", "most_activities", "balanced"]
+    variant: Literal["optimal"]
     stops: list[ScheduledStop]
     totalDurationMinutes: int
     includedActivityIds: list[str]
