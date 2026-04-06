@@ -136,7 +136,6 @@ export function TripConfigPanel({
               <TimePicker
                 value={startTime}
                 onChange={(v) => { setStartTime(v); emit({ startTime: v }); }}
-                placeholder="Start time"
               />
             </div>
             <div className="space-y-1.5">
@@ -144,7 +143,6 @@ export function TripConfigPanel({
               <TimePicker
                 value={endTime}
                 onChange={(v) => { setEndTime(v); emit({ endTime: v }); }}
-                placeholder="End time"
               />
             </div>
           </div>
