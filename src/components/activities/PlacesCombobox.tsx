@@ -47,33 +47,27 @@ export function PlacesCombobox({ value, onSelect, placeholder }: Props) {
   };
 
   return (
-    <Command className="border border-input rounded-xl shadow-sm overflow-hidden bg-background" shouldFilter={false}>
+    <Command className="rounded-xl overflow-hidden bg-transparent p-0" shouldFilter={false}>
       <CommandInput
         value={query}
         onValueChange={handleInput}
         placeholder={placeholder ?? "Search for a place..."}
         onFocus={() => predictions.length > 0 && setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
-        className="h-10"
       />
-      {open && (
-        <CommandList className="border-t border-border/40">
-          {predictions.length === 0 ? (
-            <CommandEmpty className="py-4 text-sm text-muted-foreground">No results found</CommandEmpty>
-          ) : (
-            <CommandGroup>
-              {predictions.map((p) => (
-                <CommandItem
-                  key={p.placeId}
-                  value={p.description}
-                  onSelect={() => handleSelect(p)}
-                  className="cursor-pointer"
-                >
-                  <span className="truncate">{p.description}</span>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          )}
+      {open && predictions.length > 0 && (
+        <CommandList className="border border-input rounded-xl mt-1 bg-popover shadow-lg">
+          <CommandGroup>
+            {predictions.map((p) => (
+              <CommandItem
+                key={p.placeId}
+                value={p.description}
+                onSelect={() => handleSelect(p)}
+              >
+                <span className="truncate">{p.description}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
         </CommandList>
       )}
     </Command>

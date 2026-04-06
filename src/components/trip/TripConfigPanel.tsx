@@ -163,7 +163,15 @@ export function TripConfigPanel({
             }}
           >
             <SelectTrigger className="h-10">
-              <SelectValue />
+              <SelectValue>
+                <span className="flex items-center gap-2">
+                  {travelMode === "driving" ? (
+                    <><Car className="h-4 w-4" /> Driving</>
+                  ) : (
+                    <><Train className="h-4 w-4" /> Public Transit</>
+                  )}
+                </span>
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="driving">
