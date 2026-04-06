@@ -20,12 +20,12 @@ interface TimePickerProps {
 export function TimePicker({ value, onChange, className }: TimePickerProps) {
   const [hours, minutes] = value.split(":").map((v) => v.padStart(2, "0"))
 
-  const handleHourChange = (newHour: string) => {
-    onChange(`${newHour}:${minutes}`)
+  const handleHourChange = (newHour: string | null) => {
+    if (newHour) onChange(`${newHour}:${minutes}`)
   }
 
-  const handleMinuteChange = (newMinute: string) => {
-    onChange(`${hours}:${newMinute}`)
+  const handleMinuteChange = (newMinute: string | null) => {
+    if (newMinute) onChange(`${hours}:${newMinute}`)
   }
 
   const hourOptions = Array.from({ length: 24 }, (_, i) =>
