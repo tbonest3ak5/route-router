@@ -368,6 +368,36 @@ export function TripMap({
           </div>
         </div>
       )}
+      
+      {/* Map Legend */}
+      {mapsLoaded && selectedRoute && (
+        <div className="absolute bottom-4 left-4 bg-card/95 backdrop-blur-sm rounded-xl border border-border/60 shadow-lg p-3 text-xs">
+          <div className="font-semibold text-foreground mb-2">Legend</div>
+          <div className="space-y-1.5">
+            {travelMode === "driving" ? (
+              <div className="flex items-center gap-2">
+                <div className="w-6 h-1 rounded-full bg-[#2d6a5e]" />
+                <span className="text-muted-foreground">Driving route</span>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-1.5 rounded-full bg-[#2d6a5e]" />
+                  <span className="text-muted-foreground">Transit (color = line)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-0.5 border-t-2 border-dashed border-gray-400" />
+                  <span className="text-muted-foreground">Walking</span>
+                </div>
+              </>
+            )}
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-[#1a3a35] flex items-center justify-center text-white text-[8px] font-bold">S</div>
+              <span className="text-muted-foreground">Start / End</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

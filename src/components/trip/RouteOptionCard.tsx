@@ -231,10 +231,12 @@ export function RouteOptionCard({
                       </span>
                     )}
                   </div>
-                  <div className="text-xs text-muted-foreground">
-                    {minutesToTime(stop.arrivalMinutes)} → {minutesToTime(stop.departureMinutes)}
-                    <span className="ml-1.5 text-muted-foreground/60">
-                      · {formatDuration(act.minDurationMinutes)}
+                  <div className="text-xs text-muted-foreground flex items-center gap-1.5">
+                    <span className="font-medium text-foreground/80">{minutesToTime(stop.arrivalMinutes)}</span>
+                    <span>→</span>
+                    <span className="font-medium text-foreground/80">{minutesToTime(stop.departureMinutes)}</span>
+                    <span className="px-1.5 py-0.5 bg-muted rounded text-muted-foreground/70">
+                      {formatDuration(stop.departureMinutes - stop.arrivalMinutes)} here
                     </span>
                   </div>
                 </div>
