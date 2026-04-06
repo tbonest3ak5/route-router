@@ -85,14 +85,14 @@ export default function Home() {
         <aside className="w-[780px] shrink-0 border-r border-border/60 flex overflow-hidden bg-card/30">
           
           {/* Friends panel */}
-          <div className="w-[320px] shrink-0 flex flex-col border-r border-border/40">
-            <div className="px-4 py-3 border-b border-border/40">
+          <div className="w-[320px] shrink-0 flex flex-col border-r border-border/40 min-h-0">
+            <div className="px-4 py-3 border-b border-border/40 shrink-0">
               <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
                 Friends & Activities
               </h2>
             </div>
-            <ScrollArea className="flex-1">
+            <ScrollArea className="flex-1 overflow-y-auto">
               <FriendList
                 friends={friends}
                 activities={activities}
@@ -105,14 +105,14 @@ export default function Home() {
           </div>
 
           {/* Trip Config + Results panel */}
-          <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-            <div className="px-4 py-3 border-b border-border/40">
+          <div className="flex-1 flex flex-col min-w-0 overflow-hidden min-h-0">
+            <div className="px-4 py-3 border-b border-border/40 shrink-0">
               <h2 className="font-semibold text-sm text-foreground flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
                 Trip Planning
               </h2>
             </div>
-            <ScrollArea className="flex-1">
+            <ScrollArea className="flex-1 overflow-y-auto">
               <TripConfigPanel
                 tripConfig={tripConfig}
                 onConfigChange={updateTripConfig}

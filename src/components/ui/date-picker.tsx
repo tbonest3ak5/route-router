@@ -4,6 +4,12 @@ import * as React from "react"
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { Calendar } from "@/components/ui/calendar"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 interface DatePickerProps {
   date: Date | undefined
@@ -18,41 +24,33 @@ export function DatePicker({
   placeholder = "Pick a date",
   className,
 }: DatePickerProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null)
-
-  const inputValue = date ? format(date, "yyyy-MM-dd") : ""
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value
-    if (!val) {
-      onDateChange(undefined)
-    } else {
-      // Parse as local date to avoid timezone shifting
-      const [y, m, d] = val.split("-").map(Number)
-      const parsed = new Date(y, m - 1, d)
-      onDateChange(isNaN(parsed.getTime()) ? undefined : parsed)
-    }
-  }
+  const [open, setOpen] = React.useState(false)
 
   return (
-    <div className={cn("relative", className)}>
-      <div
-        className="flex h-10 w-full items-center justify-between rounded-xl border border-input bg-background px-3 py-2 text-sm shadow-sm cursor-pointer hover:border-primary/40 transition-colors"
-        onClick={() => inputRef.current?.showPicker?.()}
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger 
+        className={cn(
+          "w-full flex items-center justify-start text-left font-normal h-10 px-3 py-2 rounded-xl border border-input bg-background shadow-sm transition-colors hover:border-primary/40 focus-visible:border-primary focus-visible:ring-3 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
+          !date && "text-muted-foreground",
+          className
+        )}
       >
-        <span className={cn(!date && "text-muted-foreground")}>
+        <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+        <span className="flex-1">
           {date ? format(date, "PPP") : placeholder}
         </span>
-        <CalendarIcon className="h-4 w-4 opacity-50 shrink-0" />
-      </div>
-      <input
-        ref={inputRef}
-        type="date"
-        value={inputValue}
-        onChange={handleChange}
-        className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-        tabIndex={-1}
-      />
-    </div>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          selected={date}
+          onSelect={(d) => {
+            onDateChange(d)
+            setOpen(false)
+          }}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   )
 }
