@@ -69,7 +69,7 @@ export interface ScheduledStop {
   travelTimeFromPreviousSeconds: number;
 }
 
-export type RouteVariant = "shortest_time" | "most_activities" | "balanced";
+export type RouteVariant = "optimal";
 
 export interface SolverRoute {
   variant: RouteVariant;
