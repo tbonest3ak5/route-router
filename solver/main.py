@@ -8,7 +8,7 @@ app = FastAPI(title="Day Trip Route Solver")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_methods=["POST", "GET"],
     allow_headers=["Content-Type"],
 )
