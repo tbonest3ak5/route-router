@@ -305,7 +305,7 @@ export function TripMap({
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mapsLoaded, selectedRoute, travelMode, activities, startLatLng, endLatLng, tripStartDate]);
+  }, [mapsLoaded, selectedRoute, travelMode, activities, startLatLng, endLatLng, tripStartDate, onDirectionsLegs]);
 
   function drawTransitPolylines(result: google.maps.DirectionsResult) {
     const map = mapInstanceRef.current!;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { FriendList } from "@/components/friends/FriendList";
 import { TripMap } from "@/components/map/TripMap";
@@ -25,15 +25,13 @@ export default function Home() {
   const selectedRoute = response?.routes[selectedRouteIndex] ?? null;
 
   // Combine trip date + start time into a Date for transit scheduling
-  const tripStartDate =
-    tripConfig
-      ? (() => {
-          const [h, m] = tripConfig.startTime.split(":").map(Number);
-          const d = new Date(tripConfig.date + "T00:00:00");
-          d.setHours(h, m, 0, 0);
-          return d;
-        })()
-      : undefined;
+  const tripStartDate = useMemo(() => {
+    if (!tripConfig) return undefined;
+    const [h, m] = tripConfig.startTime.split(":").map(Number);
+    const d = new Date(tripConfig.date + "T00:00:00");
+    d.setHours(h, m, 0, 0);
+    return d;
+  }, [tripConfig?.date, tripConfig?.startTime]);
 
   const handleSolve = () => {
     if (!tripConfig || activities.length === 0) return;
