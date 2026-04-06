@@ -1,5 +1,10 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Python solver venv
+/solver/.venv
+/solver/__pycache__
+/solver/*.pyc
+
 # dependencies
 /node_modules
 /.pnp
