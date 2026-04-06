@@ -133,9 +133,9 @@ export function TripMap({
     const bounds = new google.maps.LatLngBounds();
     const friendMap = new Map(friends.map((f) => [f.id, f]));
 
-    const addDepotMarker = (latlng: LatLng, glyph: string, title: string) => {
+    const addDepotMarker = (latlng: LatLng, glyphText: string, title: string) => {
       const pin = new google.maps.marker.PinElement({
-        glyph,
+        glyphText,
         background: "#1a3a35",
         borderColor: "#1a3a35",
         glyphColor: "#ffffff",
