@@ -49,19 +49,18 @@ export function ActivityForm({ friendId, onSubmit, onCancel }: Props) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 p-3 bg-muted/40 rounded-lg">
-      <div className="space-y-1">
-        <Label className="text-xs">Activity name (optional)</Label>
+    <form onSubmit={handleSubmit} className="space-y-4 p-4 bg-muted/30 rounded-xl border border-border/40">
+      <div className="space-y-1.5">
+        <Label className="text-xs text-muted-foreground">Activity name (optional)</Label>
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="e.g. MoMA, Central Park..."
-          className="h-8 text-sm"
         />
       </div>
 
-      <div className="space-y-1">
-        <Label className="text-xs">Location *</Label>
+      <div className="space-y-1.5">
+        <Label className="text-xs text-muted-foreground">Location *</Label>
         <PlacesCombobox
           value={address}
           onSelect={handlePlaceSelect}
@@ -69,8 +68,8 @@ export function ActivityForm({ friendId, onSubmit, onCancel }: Props) {
         />
       </div>
 
-      <div className="space-y-1">
-        <Label className="text-xs">Minimum duration *</Label>
+      <div className="space-y-1.5">
+        <Label className="text-xs text-muted-foreground">Minimum duration *</Label>
         <div className="flex gap-2 items-center">
           <Input
             type="number"
@@ -78,7 +77,7 @@ export function ActivityForm({ friendId, onSubmit, onCancel }: Props) {
             max="12"
             value={hours}
             onChange={(e) => setHours(e.target.value)}
-            className="h-8 w-16 text-sm"
+            className="w-20"
           />
           <span className="text-xs text-muted-foreground">h</span>
           <Input
@@ -88,33 +87,33 @@ export function ActivityForm({ friendId, onSubmit, onCancel }: Props) {
             step="15"
             value={minutes}
             onChange={(e) => setMinutes(e.target.value)}
-            className="h-8 w-16 text-sm"
+            className="w-20"
           />
           <span className="text-xs text-muted-foreground">min</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3 py-1">
         <Switch
           id={`required-${friendId}`}
           checked={required}
           onCheckedChange={setRequired}
         />
-        <Label htmlFor={`required-${friendId}`} className="text-xs cursor-pointer">
+        <Label htmlFor={`required-${friendId}`} className="text-xs cursor-pointer text-foreground">
           Non-negotiable (must visit)
         </Label>
       </div>
 
-      <div className="flex gap-2 pt-1">
-        <Button type="submit" size="sm" disabled={!latlng} className="h-7 text-xs">
-          Add
+      <div className="flex gap-2 pt-2">
+        <Button type="submit" size="sm" disabled={!latlng} className="h-9 text-xs px-4">
+          Add Activity
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
           onClick={onCancel}
-          className="h-7 text-xs"
+          className="h-9 text-xs"
         >
           Cancel
         </Button>

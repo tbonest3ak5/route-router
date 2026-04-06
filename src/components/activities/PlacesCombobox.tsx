@@ -47,7 +47,7 @@ export function PlacesCombobox({ value, onSelect, placeholder }: Props) {
   };
 
   return (
-    <Command className="border rounded-md" shouldFilter={false}>
+    <Command className="rounded-xl overflow-hidden bg-transparent p-0" shouldFilter={false}>
       <CommandInput
         value={query}
         onValueChange={handleInput}
@@ -55,23 +55,19 @@ export function PlacesCombobox({ value, onSelect, placeholder }: Props) {
         onFocus={() => predictions.length > 0 && setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
       />
-      {open && (
-        <CommandList>
-          {predictions.length === 0 ? (
-            <CommandEmpty>No results</CommandEmpty>
-          ) : (
-            <CommandGroup>
-              {predictions.map((p) => (
-                <CommandItem
-                  key={p.placeId}
-                  value={p.description}
-                  onSelect={() => handleSelect(p)}
-                >
-                  {p.description}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          )}
+      {open && predictions.length > 0 && (
+        <CommandList className="border border-input rounded-xl mt-1 bg-popover shadow-lg">
+          <CommandGroup>
+            {predictions.map((p) => (
+              <CommandItem
+                key={p.placeId}
+                value={p.description}
+                onSelect={() => handleSelect(p)}
+              >
+                <span className="truncate">{p.description}</span>
+              </CommandItem>
+            ))}
+          </CommandGroup>
         </CommandList>
       )}
     </Command>

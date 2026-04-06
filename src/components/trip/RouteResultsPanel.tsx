@@ -22,9 +22,10 @@ export function RouteResultsPanel({
   directionsLegs,
 }: Props) {
   return (
-    <div className="px-4 py-4">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="font-semibold text-sm flex items-center gap-1.5">
+    <div className="px-5 py-5">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-semibold text-sm flex items-center gap-2 text-foreground">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
           Route Options
         </h2>
         <span className="text-xs text-muted-foreground flex items-center gap-1">

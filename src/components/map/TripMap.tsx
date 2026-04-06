@@ -109,14 +109,15 @@ export function TripMap({
       streetViewControl: false,
       mapTypeControl: false,
       fullscreenControl: true,
+      gestureHandling: "greedy",
     });
 
     directionsRendererRef.current = new google.maps.DirectionsRenderer({
       suppressMarkers: true,
       polylineOptions: {
-        strokeColor: "#6366F1",
+        strokeColor: "#2d6a5e",
         strokeWeight: 5,
-        strokeOpacity: 0.85,
+        strokeOpacity: 0.9,
       },
     });
     directionsRendererRef.current.setMap(mapInstanceRef.current);
@@ -132,13 +133,13 @@ export function TripMap({
     const bounds = new google.maps.LatLngBounds();
     const friendMap = new Map(friends.map((f) => [f.id, f]));
 
-    const addDepotMarker = (latlng: LatLng, glyph: string, title: string) => {
+    const addDepotMarker = (latlng: LatLng, glyphText: string, title: string) => {
       const pin = new google.maps.marker.PinElement({
-        glyph,
-        background: "#0f172a",
-        borderColor: "#0f172a",
+        glyphText,
+        background: "#1a3a35",
+        borderColor: "#1a3a35",
         glyphColor: "#ffffff",
-        scale: 1.1,
+        scale: 1.15,
       });
       const m = new google.maps.marker.AdvancedMarkerElement({
         position: latlng,
@@ -160,7 +161,7 @@ export function TripMap({
 
     activities.forEach((act) => {
       const friend = friendMap.get(act.friendId);
-      const color = friend?.color ?? "#6366F1";
+      const color = friend?.color ?? "#2d6a5e";
 
       const pin = new google.maps.marker.PinElement({
         background: color,
@@ -315,7 +316,7 @@ export function TripMap({
       const rawColor = isTransit ? (step.transit?.line?.color ?? "") : "";
       const lineColor = rawColor
         ? rawColor.startsWith("#") ? rawColor : `#${rawColor}`
-        : isTransit ? "#6366F1" : "#6B7280";
+        : isTransit ? "#2d6a5e" : "#6B7280";
 
       if (isTransit) {
         transitPolylinesRef.current.push(
@@ -357,11 +358,14 @@ export function TripMap({
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full bg-muted/20">
       <div ref={mapRef} className="w-full h-full" />
       {!mapsLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-muted/60">
-          <p className="text-sm text-muted-foreground">Loading map…</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 rounded-full border-3 border-primary border-t-transparent animate-spin" />
+            <p className="text-sm font-medium text-foreground">Loading map...</p>
+          </div>
         </div>
       )}
     </div>

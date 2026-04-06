@@ -1,6 +1,6 @@
 "use client";
 
-import { Users } from "lucide-react";
+import { UserPlus } from "lucide-react";
 
 import { AddFriendDialog } from "./AddFriendDialog";
 import { FriendCard } from "./FriendCard";
@@ -24,21 +24,19 @@ export function FriendList({
   onRemoveActivity,
 }: Props) {
   return (
-    <div className="px-4 py-4">
-      <h2 className="font-semibold text-sm flex items-center gap-1.5 mb-3">
-        <Users className="h-3.5 w-3.5 text-muted-foreground" />
-        Friends & Activities
-      </h2>
-
+    <div className="p-5">
       {friends.length === 0 ? (
-        <div className="rounded-lg border border-dashed p-6 text-center mb-2">
-          <p className="text-sm text-muted-foreground">No friends added yet</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">
-            Add friends and their preferred activities below
+        <div className="rounded-xl border-2 border-dashed border-border/60 p-8 text-center">
+          <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+            <UserPlus className="h-5 w-5 text-muted-foreground" />
+          </div>
+          <p className="text-sm font-medium text-foreground">No friends added yet</p>
+          <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+            Add friends and their preferred activities to start planning your trip
           </p>
         </div>
       ) : (
-        <div className="space-y-2 mb-2">
+        <div className="space-y-3">
           {friends.map((friend) => (
             <FriendCard
               key={friend.id}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { UserPlus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +10,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,34 +32,49 @@ export function AddFriendDialog({ onAdd }: Props) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all border border-dashed border-input bg-background shadow-xs hover:bg-accent hover:text-accent-foreground w-full mt-2 h-9 px-4 py-2"
+    <>
+      <Button
+        variant="outline"
+        className="w-full mt-3 h-10 border-dashed border-border/60 hover:border-primary/40 hover:bg-accent/50"
+        onClick={() => setOpen(true)}
       >
-        + Add Friend
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-xs">
+        <UserPlus className="h-4 w-4 mr-2" />
+        Add Friend
+      </Button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>Add Friend</DialogTitle>
+          <DialogTitle className="text-lg">Add a Friend</DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div className="space-y-1">
-            <Label htmlFor="friend-name">Name</Label>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="friend-name" className="text-sm font-medium">
+              Name
+            </Label>
             <Input
               id="friend-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Alice"
+              placeholder="Enter friend's name"
               autoFocus
+              className="h-10"
             />
           </div>
           <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
             <Button type="submit" disabled={!name.trim()}>
-              Add
+              Add Friend
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
-    </Dialog>
+      </Dialog>
+    </>
   );
 }
