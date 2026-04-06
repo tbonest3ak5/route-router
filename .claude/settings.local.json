@@ -7,7 +7,9 @@
       "Bash(pip index:*)",
       "Bash(python -c \"import sys; print\\(sys.version_info\\)\")",
       "Bash(npm list:*)",
-      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --yes)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --yes)",
+      "Bash(npx shadcn@latest init --yes)",
+      "Bash(npx shadcn@latest init -d)"
     ]
   }
 }
