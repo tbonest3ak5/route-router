@@ -78,6 +78,8 @@ export interface SolverRoute {
   includedActivityIds: string[];
   excludedActivityIds: string[];
   score: number;
+  startDepartureMinutes?: number;  // departure time from start location
+  endArrivalMinutes?: number;      // arrival time at end location
 }
 
 export interface SolverResponse {

@@ -13,6 +13,7 @@ interface Props {
   onRemoveFriend: (id: string) => void;
   onAddActivity: (activity: Omit<Activity, "id">) => void;
   onRemoveActivity: (id: string) => void;
+  onUpdateActivity?: (id: string, updates: Partial<Activity>) => void;
 }
 
 export function FriendList({
@@ -22,6 +23,7 @@ export function FriendList({
   onRemoveFriend,
   onAddActivity,
   onRemoveActivity,
+  onUpdateActivity,
 }: Props) {
   return (
     <div className="p-5">
@@ -44,6 +46,7 @@ export function FriendList({
               activities={activities.filter((a) => a.friendId === friend.id)}
               onAddActivity={onAddActivity}
               onRemoveActivity={onRemoveActivity}
+              onUpdateActivity={onUpdateActivity}
               onRemoveFriend={onRemoveFriend}
             />
           ))}

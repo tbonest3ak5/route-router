@@ -18,6 +18,7 @@ interface Props {
   activities: Activity[];
   onAddActivity: (activity: Omit<Activity, "id">) => void;
   onRemoveActivity: (id: string) => void;
+  onUpdateActivity?: (id: string, updates: Partial<Activity>) => void;
   onRemoveFriend: (id: string) => void;
 }
 
@@ -26,6 +27,7 @@ export function FriendCard({
   activities,
   onAddActivity,
   onRemoveActivity,
+  onUpdateActivity,
   onRemoveFriend,
 }: Props) {
   const [open, setOpen] = useState(true);
@@ -74,6 +76,7 @@ export function FriendCard({
                     key={a.id}
                     activity={a}
                     onRemove={onRemoveActivity}
+                    onUpdate={onUpdateActivity}
                   />
                 ))}
               </div>

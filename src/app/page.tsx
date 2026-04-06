@@ -15,7 +15,7 @@ import { DirectionsLegDetails } from "@/types";
 import { Compass } from "lucide-react";
 
 export default function Home() {
-  const { friends, activities, addFriend, removeFriend, addActivity, removeActivity } =
+  const { friends, activities, addFriend, removeFriend, addActivity, removeActivity, updateActivity } =
     useFriends();
   const { tripConfig, updateTripConfig } = useTripConfig();
   const { solve, response, isLoading, error, selectedRouteIndex, setSelectedRouteIndex } =
@@ -100,6 +100,7 @@ export default function Home() {
                 onRemoveFriend={removeFriend}
                 onAddActivity={addActivity}
                 onRemoveActivity={removeActivity}
+                onUpdateActivity={updateActivity}
               />
             </ScrollArea>
           </div>
@@ -137,6 +138,7 @@ export default function Home() {
                     selectedRouteIndex={selectedRouteIndex}
                     onSelectRoute={handleRouteSelect}
                     directionsLegs={directionsLegs}
+                    tripConfig={tripConfig}
                   />
                 </>
               )}

@@ -4,12 +4,14 @@ import { Bus, Footprints, Train } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { formatDuration, formatTravelTime, minutesToTime } from "@/lib/time-utils";
+import { timeToMinutes } from "@/lib/time-utils";
 import {
   Activity,
   DirectionsLegDetails,
   Friend,
   SolverRoute,
   TransitStepDetails,
+  TripConfig,
 } from "@/types";
 
 const VARIANT_META: Record<
@@ -126,6 +128,7 @@ interface Props {
   onSelect: () => void;
   // Leg details only present for the currently rendered route
   legDetails?: DirectionsLegDetails[] | null;
+  tripConfig?: TripConfig | null;
 }
 
 export function RouteOptionCard({
@@ -135,7 +138,11 @@ export function RouteOptionCard({
   isSelected,
   onSelect,
   legDetails,
+  tripConfig,
 }: Props) {
+  // Extract start and end times from tripConfig
+  const startMinutes = tripConfig ? timeToMinutes(tripConfig.startTime) : 0;
+  const endMinutes = tripConfig ? timeToMinutes(tripConfig.endTime) : 0;
   const actMap = new Map(activities.map((a) => [a.id, a]));
   const friendMap = new Map(friends.map((f) => [f.id, f]));
 
@@ -190,6 +197,31 @@ export function RouteOptionCard({
 
       {/* Timeline */}
       <div className="px-3 pb-3">
+        {/* Start point */}
+        <div className="flex items-start gap-3 py-1.5">
+          <div className="flex flex-col items-center shrink-0 mt-1">
+            <div className="w-[18px] h-[18px] rounded-full border-2 border-background shadow-sm shrink-0 flex items-center justify-center bg-green-500" />
+            <div className="w-px h-2 bg-border/50 mt-0.5" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-semibold text-green-600 dark:text-green-400">Depart Start</span>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <span className="font-medium text-foreground/80">{minutesToTime(startMinutes)}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* First leg: start → first stop */}
+        {legDetails?.[0] && legDetails[0].steps.length > 0 && (
+          <div className="border-l-2 border-dashed border-muted-foreground/20 ml-[9px]">
+            {legDetails[0].steps.map((step, si) => (
+              <TransitStepRow key={si} step={step} />
+            ))}
+          </div>
+        )}
+
         {route.stops.map((stop, i) => {
           const act = actMap.get(stop.activityId);
           const friend = act ? friendMap.get(act.friendId) : null;
@@ -199,8 +231,8 @@ export function RouteOptionCard({
 
           return (
             <div key={stop.activityId}>
-              {/* Transit steps BEFORE this stop (the journey to get here) */}
-              {legBefore && legBefore.steps.length > 0 && (
+              {/* Transit steps BEFORE this stop (the journey to get here) - skip leg 0 since we already showed it */}
+              {legBefore && i + 1 < (legDetails?.length ?? 0) && legBefore.steps.length > 0 && (
                 <div className="border-l-2 border-dashed border-muted-foreground/20 ml-[9px]">
                   {legBefore.steps.map((step, si) => (
                     <TransitStepRow key={si} step={step} />
@@ -253,6 +285,22 @@ export function RouteOptionCard({
             ))}
           </div>
         )}
+
+        {/* End point */}
+        <div className="flex items-start gap-3 py-1.5">
+          <div className="flex flex-col items-center shrink-0 mt-1">
+            <div className="w-px h-2 bg-border/50 mb-0.5" />
+            <div className="w-[18px] h-[18px] rounded-full border-2 border-background shadow-sm shrink-0 flex items-center justify-center bg-red-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm font-semibold text-red-600 dark:text-red-400">Arrive End</span>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              <span className="font-medium text-foreground/80">{minutesToTime(endMinutes)}</span>
+            </div>
+          </div>
+        </div>
 
         {/* Excluded optionals */}
         {route.excludedActivityIds.length > 0 && (

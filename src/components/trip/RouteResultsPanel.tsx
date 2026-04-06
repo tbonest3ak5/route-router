@@ -1,7 +1,7 @@
 "use client";
 
 import { RouteOptionCard } from "./RouteOptionCard";
-import { Activity, DirectionsLegDetails, Friend, SolverResponse } from "@/types";
+import { Activity, DirectionsLegDetails, Friend, SolverResponse, TripConfig } from "@/types";
 import { Clock } from "lucide-react";
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
   selectedRouteIndex: number;
   onSelectRoute: (index: number) => void;
   directionsLegs: DirectionsLegDetails[] | null;
+  tripConfig: TripConfig | null;
 }
 
 export function RouteResultsPanel({
@@ -20,6 +21,7 @@ export function RouteResultsPanel({
   selectedRouteIndex,
   onSelectRoute,
   directionsLegs,
+  tripConfig,
 }: Props) {
   return (
     <div className="px-5 py-5">
@@ -45,6 +47,7 @@ export function RouteResultsPanel({
             isSelected={selectedRouteIndex === i}
             onSelect={() => onSelectRoute(i)}
             legDetails={selectedRouteIndex === i ? directionsLegs : null}
+            tripConfig={tripConfig}
           />
         ))}
       </div>
