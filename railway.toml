@@ -1,6 +1,0 @@
-[build]
-builder = "nixpacks"
-buildCommand = "pip install -r solver/requirements.txt"
-
-[deploy]
-startCommand = "cd solver && uvicorn main:app --host 0.0.0.0 --port $PORT"
