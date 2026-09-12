@@ -1,4 +1,9 @@
 ## Route Router
+Demo video:
+
+[<img src="https://img.youtube.com/vi/Oma1VpNjCZQ/hqdefault.jpg"
+/>](https://www.youtube.com/embed/Oma1VpNjCZQ)
+
 You and your friends want to visit locations in a city. Route Router finds the best route to do all non-negotiable activities while maximizing other activities and minimizing travel time. 
 
 Tech stack:
@@ -10,7 +15,7 @@ Tech stack:
 - Site deployed on Vercel
 - Solver deployed on Railway
 
-Vibe coded stuff below:
+Vibe coded text below:
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
